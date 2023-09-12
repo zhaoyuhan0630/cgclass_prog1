@@ -176,7 +176,7 @@ class Vec3 {
     }
 
     static cross(A = new Vec3(0, 0, 0), B = new Vec3(0, 0, 0)) {
-        return new Vec3(A.y * B.z - B.y * A.z, A.z * B.x - B.z * A.x, A.x * B.y - B.x - A.y);
+        return new Vec3(A.y * B.z - B.y * A.z, A.z * B.x - B.z * A.x, A.x * B.y - B.x * A.y);
     }
 
     static multiply(A = new Vec3(1, 2, 3), B = new Vec3(1, 1, 1)) {
@@ -220,7 +220,7 @@ class Vec3 {
     }
 
     cross(B = new Vec3(0, 0, 0)) {
-        return new Vec3(this.y * B.z - B.y * this.z, this.z * B.x - B.z * this.x, this.x * B.y - B.x - this.y);
+        return new Vec3(this.y * B.z - B.y * this.z, this.z * B.x - B.z * this.x, this.x * B.y - B.x * this.y);
     }
 
     multiply(B = new Vec3(1, 1, 1)) {
@@ -273,7 +273,7 @@ class View {
         viewVolume = new Vec3(1, 1, Infinity),
         // fov = Math.PI/2,       // radians
         // aspectRatio = 1,       // square
-        {context}
+        {context, renderTriangles}
     ) {
         this.eyePosition = eyePosition;
         this.gazeDirection = Vec3.normalize(gazeDirection);
@@ -284,6 +284,7 @@ class View {
         // this.fov = fov;
         // this.aspectRatio = aspectRatio;
         this.context = context;
+        this.renderTriangles = renderTriangles;
 
         // const M = new Mat4([
         //     [2 * Math.abs(viewPlaneDistance), 0, 2 * Vec3.add(eyePosition, Vec3.scale(gazeDirection, viewPlaneDistance)).x / viewVolume.x, 0],
@@ -309,32 +310,34 @@ class View {
             ))
         })
         // Triangles
-        // getInputTriangles().forEach(inputSet => {
-        //     inputSet.triangles.forEach(vertexSet => {
-        //         this.allSceneObjects.push(new Triangle(
-        //             new Vec3(
-        //                 ...vertexSet.reduce((accum, curr) => {
-        //                     accum[0] += inputSet.vertices[curr][0]/3;
-        //                     accum[1] += inputSet.vertices[curr][1]/3;
-        //                     accum[2] += inputSet.vertices[curr][2]/3;
-        //                     return accum;
-        //                 }, [0,0,0])
-        //             ),
-        //             new Vec3(0, 0, 0),
-        //             {
-        //                 ambient: new Vec3(...(inputSet.material.ambient)),
-        //                 diffuse: new Vec3(...(inputSet.material.diffuse)),
-        //                 specular: new Vec3(...(inputSet.material.specular)),
-        //                 n: inputSet.material.n
-        //             },
-        //             {
-        //                 A: new Vec3(...inputSet.vertices[vertexSet[0]]),
-        //                 B: new Vec3(...inputSet.vertices[vertexSet[1]]),
-        //                 C: new Vec3(...inputSet.vertices[vertexSet[2]]),
-        //             }
-        //         ))
-        //     })
-        // })
+        if (this.renderTriangles) {
+            getInputTriangles().forEach(inputSet => {
+                inputSet.triangles.forEach(vertexSet => {
+                    this.allSceneObjects.push(new Triangle(
+                        new Vec3(
+                            ...vertexSet.reduce((accum, curr) => {
+                                accum[0] += inputSet.vertices[curr][0] / 3;
+                                accum[1] += inputSet.vertices[curr][1] / 3;
+                                accum[2] += inputSet.vertices[curr][2] / 3;
+                                return accum;
+                            }, [0, 0, 0])
+                        ),
+                        new Vec3(0, 0, 0),
+                        {
+                            ambient: new Vec3(...(inputSet.material.ambient)),
+                            diffuse: new Vec3(...(inputSet.material.diffuse)),
+                            specular: new Vec3(...(inputSet.material.specular)),
+                            n: inputSet.material.n
+                        },
+                        {
+                            A: new Vec3(...inputSet.vertices[vertexSet[0]]),
+                            B: new Vec3(...inputSet.vertices[vertexSet[1]]),
+                            C: new Vec3(...inputSet.vertices[vertexSet[2]]),
+                        }
+                    ))
+                })
+            })
+        }
 
         // add light-sources
         this.lightSources = [];
@@ -354,18 +357,17 @@ class View {
             this.lightSources.push(inputObj)
         })
 
-        // Curvilinear
-        // const hrztViewHalfAngle = Math.atan(this.viewVolume.x/(2*this.viewPlaneDistance));
-        // const vertViewHalfAngle = Math.atan(this.viewVolume.y/(2*this.viewPlaneDistance));
-        // this.viewPlaneRight = Vec3.multiply(Vec3.cross(gazeDirection, Vec3.normalize(this.viewUp)), new Vec3(this.viewPlaneDistance*Math.sin(hrztViewHalfAngle), 1, this.viewPlaneDistance*Math.cos(hrztViewHalfAngle)).scale(-1))
-        // this.viewPlaneDown = Vec3.multiply(this.viewUp, new Vec3(1, this.viewPlaneDistance*Math.sin(vertViewHalfAngle), this.viewPlaneDistance*Math.cos(vertViewHalfAngle)).scale(-1))
-
         // Rectilinear
-        this.viewPlaneRight = Vec3.scale(Vec3.cross(gazeDirection, Vec3.normalize(this.viewUp)), -viewVolume.x / viewport.width)
-        this.viewPlaneDown = Vec3.scale(this.viewUp, -viewVolume.y / viewport.height)
+        this.viewPlaneRight = Vec3.scale(Vec3.cross(this.gazeDirection, this.viewUp), -this.viewVolume.x / this.viewport.width)
+        this.viewPlaneDown = Vec3.scale(this.viewUp, -this.viewVolume.y / this.viewport.height)
 
-        this.viewPlaneCenterPosition = Vec3.add(eyePosition, Vec3.scale(gazeDirection, this.viewPlaneDistance))
-        this.viewPlaneTopLeftPosition = Vec3.add(Vec3.add(this.viewPlaneCenterPosition, Vec3.scale(this.viewPlaneRight, -viewport.width / 2)), Vec3.scale(this.viewPlaneDown, -viewport.height / 2))
+        // Curvilinear
+        // const ET =
+        // this.viewPlaneRight = this.viewPlaneRight.multiply(this.viewPlaneDistance/(this.viewVolume.x / this.viewport.width))
+        // this.viewPlaneDown = this.viewPlaneDown.normalize().scale(this.viewPlaneDistance)
+
+        this.viewPlaneCenterPosition = Vec3.add(this.eyePosition, Vec3.scale(this.gazeDirection, this.viewPlaneDistance))
+        this.viewPlaneTopLeftPosition = Vec3.add(Vec3.add(this.viewPlaneCenterPosition, Vec3.scale(this.viewPlaneRight, -this.viewport.width / 2)), Vec3.scale(this.viewPlaneDown, -this.viewport.height / 2))
 
     }
 
@@ -396,7 +398,7 @@ class View {
                             } else {
                                 // Shading
                                 const intersectionPoint = Vec3.add(this.eyePosition, Vec3.scale(rayDirection, t))
-                                const normalVec = Vec3.normalize(Vec3.divide(Vec3.scale(Vec3.subtract(intersectionPoint, so.position), 2), Vec3.multiply(so.radii, so.radii)))
+                                const normalVec = so.getNormal(intersectionPoint)
                                 let tempColorVec = new Vec3(0, 0, 0)
                                 const combinedMatrlProps = {
                                     ambient: new Vec3(0, 0, 0),
@@ -410,14 +412,14 @@ class View {
                                     if (NL <= 0) {
                                         return;
                                     }
-                                    const reflectionVec = Vec3.subtract(Vec3.scale(normalVec, 2 * NL), lightVec)
-                                    const RN = Vec3.dot(reflectionVec, normalVec)
+                                    // const reflectionVec = Vec3.subtract(Vec3.scale(normalVec, 2 * NL), lightVec)
+                                    // const RN = Vec3.dot(reflectionVec, normalVec)
                                     const EL = Vec3.subtract(lightVec, this.gazeDirection)
                                     const highlightVec = Vec3.normalize(Vec3.scale(EL, Vec3.distance(EL)))
-                                    const HN = Vec3.dot(reflectionVec, normalVec)
+                                    const HN = Vec3.dot(highlightVec, normalVec)
 
                                     combinedMatrlProps.diffuse = combinedMatrlProps.diffuse.add(ls.matrlProps.diffuse.scale(NL))
-                                    combinedMatrlProps.specular = combinedMatrlProps.specular.add(ls.matrlProps.specular.scale(Math.max(0, RN) ** so.matrlProps.n))
+                                    combinedMatrlProps.specular = combinedMatrlProps.specular.add(ls.matrlProps.specular.scale(Math.max(0, HN) ** so.matrlProps.n))
                                 })
 
                                 tempColorVec = tempColorVec.add(so.matrlProps.ambient.multiply(combinedMatrlProps.ambient))        // ambient
@@ -434,9 +436,7 @@ class View {
                             }
                         }
                     }
-
                     drawPixel(imagedata, i, j, pixelColor)
-
                 })
             }
         }
@@ -462,6 +462,12 @@ class SceneObject {
     }
 
     getIntersection(eyePosition = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
+        if (true) {
+            throw "getIntersection: Unimplemented function"
+        }
+    }
+
+    getNormal(intersectionPoint = new Vec3(0, 0, 0)) {
         if (true) {
             throw "getIntersection: Unimplemented function"
         }
@@ -500,6 +506,10 @@ class Ellipsoid extends SceneObject {
             const temp = Math.sqrt(discriminant);
             return Math.min((-b + temp) / (2 * a), (-b - temp) / (2 * a));
         }
+    }
+
+    getNormal(intersectionPoint = new Vec3(0, 0, 0)) {
+        return Vec3.normalize(Vec3.divide(Vec3.scale(Vec3.subtract(intersectionPoint, this.position), 2), Vec3.multiply(this.radii, this.radii)))
     }
 }
 
@@ -544,7 +554,14 @@ class Triangle extends SceneObject {
             return 0;
         }
 
-        return this.intersectionInteriority(eyePosition.add(rayDirection.scale(t))) ? t : 0
+        if (this.intersectionInteriority(eyePosition.add(rayDirection.scale(t)))) {
+            return t;
+        }
+        return 0;
+    }
+
+    getNormal(intersectionPoint = new Vec3(0, 0, 0)) {
+        return this.normalVec;
     }
 }
 
@@ -579,6 +596,12 @@ class Box extends SceneObject {
         } else {
             const temp = Math.sqrt(discriminant);
             return Math.min((-b + temp) / (2 * a), (-b - temp) / (2 * a));
+        }
+    }
+
+    getNormal(intersectionPoint = new Vec3(0, 0, 0)) {
+        if (true) {
+            throw "getIntersection: Unimplemented function"
         }
     }
 }
@@ -616,45 +639,56 @@ class LightSource extends SceneObject {
             return Math.min((-b + temp) / (2 * a), (-b - temp) / (2 * a));
         }
     }
+
+    getNormal(intersectionPoint = new Vec3(0, 0, 0)) {
+        return;
+    }
 }
 
 /* main -- here is where execution begins after window load */
 
-function main() {
+const parameters = {
+    renderTriangles: false,
+    eyePosition: new Vec3(0.5, 0.5, -0.5),
+    gazeDirection: new Vec3(0, 0, 1),
+    viewUp: new Vec3(0, 1, 0),
+    viewPlaneDistance: 0.5,
+    viewVolume: new Vec3(1, 1, Infinity)
+}
+
+
+function main(
+    eyePosition = new Vec3(0.5, 0.5, -0.5),
+    gazeDirection = new Vec3(0, 0, 1),
+    viewUp = new Vec3(0, 1, 0),
+    viewPlaneDistance = 0.5,
+    viewVolume = new Vec3(1, 1, Infinity),
+    viewport = {width: 512, height: 512},
+    renderTriangles = false
+) {
+
+    console.log({
+        eyePosition,
+        gazeDirection,
+        viewUp,
+        viewPlaneDistance,
+        viewVolume,
+        viewport,
+        renderTriangles
+    })
 
     // Get the canvas and context
-    var canvas = document.getElementById("viewport");
-    var context = canvas.getContext("2d");
+    const canvas = document.getElementById("viewport");
+    canvas.clientWidth = viewport.width;
+    canvas.clientHeight = viewport.height;
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    const context = canvas.getContext("2d");
 
-    const eyePosition = new Vec3(0.5, 0.5, -0.5)
-    const gazeDirection = new Vec3(0, 0, 1)
-    const viewUp = new Vec3(0, 1, 0)
-    const viewport = {width: context.canvas.width, height: context.canvas.height}
-    const viewPlaneDistance = 0.5
-    const viewVolume = new Vec3(1, 1, Infinity)
-    const view = new View(eyePosition, gazeDirection, viewUp, viewport, viewPlaneDistance, viewVolume, {context})
+    const view = new View(eyePosition, gazeDirection, viewUp, viewport, viewPlaneDistance, viewVolume, {
+        context,
+        renderTriangles
+    })
 
     view.renderView()
-
-    // Create the image
-    // drawRandPixels(context);
-    // shows how to draw pixels
-
-    // drawRandPixelsInInputEllipsoids(context);
-    // shows how to draw pixels and read input file
-
-    // drawInputEllipsoidsUsingArcs(context);
-    // shows how to read input file, but not how to draw pixels
-
-    //drawRandPixelsInInputTriangles(context);
-    // shows how to draw pixels and read input file
-
-    //drawInputTrainglesUsingPaths(context);
-    // shows how to read input file, but not how to draw pixels
-
-    //drawRandPixelsInInputBoxes(context);
-    // shows how to draw pixels and read input file
-
-    //drawInputBoxesUsingPaths(context);
-    // shows how to read input file, but not how to draw pixels
 }

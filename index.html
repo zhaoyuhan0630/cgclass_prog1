@@ -1,19 +1,149 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Pixel Drawing</title>
-<script type="text/javascript" src="drawstuff.js"></script>
+    <meta charset="UTF-8">
+    <title>Pixel Drawing</title>
+    <script type="text/javascript" src="drawstuff.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        form {
+            border: black 1px solid;
+            padding: 5px;
+            width: max-content;
+        }
+
+        span {
+            margin: 10px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+        input {
+            margin: 3px;
+            width: 30px;
+        }
+
+        div {
+            border-top: 1px black solid;
+            max-width: max-content;
+        }
+
+        .inner_div {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            border: 0;
+        }
+
+        h3 {
+            margin: 4px;
+        }
+        
+        button{
+            background-color: deepskyblue;
+            color: azure;
+        }
+    </style>
 </head>
 <body onload="main();">
 <canvas id="viewport" width="512" height="512" style="border: 1px black solid"></canvas>
-<form>
-    <h1>Input Parameters</h1>
-    <h2>View:</h2>
-    <span>
-        <label for="eye">eyePosition:</label>
-        <input type="text" name="eye" id="eyePos"/>
-    </span>
+<form id="params_form" name="params_form" action="" method="post">
+    <button type="submit">Render</button>
 </form>
+<script>
+    const params_form = document.getElementById('params_form')
+    const heading = document.createElement('h1')
+    heading.innerText = 'View Parameters'
+    params_form.appendChild(heading)
+    params_form.addEventListener('submit', ev => {
+        ev.preventDefault()
+        const form_data = new FormData(ev.target)
+        const params = Object.fromEntries(form_data.entries())
+
+        Object.keys(params).forEach(key => {
+            params[key] = parseFloat(params[key])
+        })
+
+        const eyePosition = new Vec3(params['eyePosition_x'], params['eyePosition_y'], params['eyePosition_z'])
+        const gazeDirection = new Vec3(params['gazeDirection_x'], params['gazeDirection_y'], params['gazeDirection_z'])
+        const viewUp = new Vec3(params['viewUp_x'], params['viewUp_y'], params['viewUp_z'])
+        const viewPlaneDistance = params['viewPlaneDistance']
+        const viewVolume = new Vec3(params['viewVolume_x'], params['viewVolume_y'], params['viewVolume_z'])
+        const viewport = {width: params['viewport_w'] || 512, height: params['viewport_h'] || 512}
+        const renderTriangles = form_data.get('renderTriangles')
+
+        let start = performance.now();
+        main(eyePosition, gazeDirection, viewUp, viewPlaneDistance, viewVolume, viewport, renderTriangles)
+        let timeTaken = performance.now() - start;
+        console.log("Total time taken : " + timeTaken + " milliseconds");
+
+    })
+    Object.keys(parameters).forEach(param => {
+        const div_node = document.createElement('div')
+        if (parameters[param].constructor === Vec3) {
+            const heading = document.createElement('h3')
+            heading.innerText = param
+            div_node.appendChild(heading)
+
+
+            const inner_div = document.createElement('div')
+            inner_div.className = 'inner_div'
+            const dim_labels = ['x', 'y', 'z']
+            let i = 0;
+            parameters[param].toArray().forEach(dim => {
+                const span_node = document.createElement('span')
+                const label_node = document.createElement('label')
+                label_node.innerText = dim_labels[i]
+                span_node.appendChild(label_node)
+
+                const input_node = document.createElement('input')
+                input_node.type = 'text'
+                input_node.name = param + '_' + dim_labels[i++]
+                input_node.value = dim
+                span_node.appendChild(input_node)
+
+                inner_div.appendChild(span_node)
+            })
+            div_node.appendChild(inner_div)
+        } else if (parameters[param].constructor === Boolean) {
+            const span_node = document.createElement('span')
+            const label_node = document.createElement('label')
+            label_node.innerText = param
+            label_node.style = "font-size: large; font-weight: bold;"
+            span_node.appendChild(label_node)
+
+            const input_node = document.createElement('input')
+            input_node.type = 'checkbox'
+            input_node.name = param
+            input_node.checked = parameters[param]
+            span_node.appendChild(input_node)
+
+            div_node.appendChild(span_node)
+        } else {
+            const span_node = document.createElement('span')
+            const label_node = document.createElement('label')
+            label_node.innerText = param
+            label_node.style = "font-size: large; font-weight: bold;"
+            span_node.appendChild(label_node)
+
+            const input_node = document.createElement('input')
+            input_node.type = 'text'
+            input_node.name = param
+            input_node.value = parameters[param]
+            span_node.appendChild(input_node)
+
+            div_node.appendChild(span_node)
+        }
+        params_form.appendChild(div_node)
+    })
+</script>
 </body>
 </html>
