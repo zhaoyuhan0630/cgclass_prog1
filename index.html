@@ -54,7 +54,7 @@
     </style>
 </head>
 <body onload="main();">
-<canvas id="viewport" width="512" height="512" style="border: 1px black solid"></canvas>
+<canvas id="viewport" width="1024" height="1024" style="border: 1px black solid"></canvas>
 <form id="params_form" name="params_form" action="" method="post">
     <button type="submit">Render</button>
 </form>
@@ -77,11 +77,12 @@
         const viewUp = new Vec3(params['viewUp_x'], params['viewUp_y'], params['viewUp_z'])
         const viewPlaneDistance = params['viewPlaneDistance']
         const viewVolume = new Vec3(params['viewVolume_x'], params['viewVolume_y'], params['viewVolume_z'])
-        const viewport = {width: params['viewport_w'] || 512, height: params['viewport_h'] || 512}
+        const viewport = {width: params['viewport_0'] || 512, height: params['viewport_1'] || 512}
         const renderTriangles = form_data.get('renderTriangles')
+        const makeItYourOwn = form_data.get('makeItYourOwn')
 
         let start = performance.now();
-        main(eyePosition, gazeDirection, viewUp, viewPlaneDistance, viewVolume, viewport, renderTriangles)
+        main(eyePosition, gazeDirection, viewUp, viewPlaneDistance, viewVolume, viewport, renderTriangles, makeItYourOwn)
         let timeTaken = performance.now() - start;
         console.log("Total time taken : " + timeTaken + " milliseconds");
 
@@ -108,6 +109,26 @@
                 input_node.type = 'text'
                 input_node.name = param + '_' + dim_labels[i++]
                 input_node.value = dim
+                span_node.appendChild(input_node)
+
+                inner_div.appendChild(span_node)
+            })
+            div_node.appendChild(inner_div)
+        } else if (parameters[param].constructor === Array) {
+            const heading = document.createElement('h3')
+            heading.innerText = param
+            div_node.appendChild(heading)
+
+            const inner_div = document.createElement('div')
+            inner_div.className = 'inner_div'
+            
+            const span_node = document.createElement('span')
+            var i=0;
+            parameters[param].forEach(key => {
+                const input_node = document.createElement('input')
+                input_node.type = 'text'
+                input_node.name = param + '_' + i
+                input_node.value = parameters[param][i++]
                 span_node.appendChild(input_node)
 
                 inner_div.appendChild(span_node)

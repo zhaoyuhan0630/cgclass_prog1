@@ -73,9 +73,11 @@ function drawPixel(imagedata, x, y, color) {
 } // end drawPixel
 
 // get the input ellipsoids from the standard class URL
-function getInputEllipsoids() {
-    const INPUT_ELLIPSOIDS_URL =
-        "/ellipsoids.json";
+function getInputEllipsoids(makeItYourOwn = false) {
+    if(makeItYourOwn){
+        return makeItYourOwnScene.ellipsoids
+    }
+    const INPUT_ELLIPSOIDS_URL = "/ellipsoids.json";
 
     // load the ellipsoids file
     var httpReq = new XMLHttpRequest(); // a new http request
@@ -94,7 +96,10 @@ function getInputEllipsoids() {
 } // end get input ellipsoids
 
 // get the input lights from the standard class URL
-function getInputLights() {
+function getInputLights(makeItYourOwn) {
+    if(makeItYourOwn){
+        return makeItYourOwnScene.lights
+    }
     const INPUT_LIGHTS_URL =
         "/lights.json";
 
@@ -115,7 +120,10 @@ function getInputLights() {
 } // end get input lights
 
 //get the input triangles from the standard class URL
-function getInputTriangles() {
+function getInputTriangles(makeItYourOwn) {
+    if(makeItYourOwn){
+        return makeItYourOwnScene.triangles
+    }
     const INPUT_TRIANGLES_URL =
         "/triangles2.json";
 
@@ -136,7 +144,10 @@ function getInputTriangles() {
 } // end get input triangles
 
 //get the input boxex from the standard class URL
-function getInputBoxes() {
+function getInputBoxes(makeItYourOwn) {
+    if(makeItYourOwn){
+        return makeItYourOwnScene.boxes
+    }
     const INPUT_BOXES_URL =
         "/boxes.json";
 
@@ -273,7 +284,7 @@ class View {
         viewVolume = new Vec3(1, 1, Infinity),
         // fov = Math.PI/2,       // radians
         // aspectRatio = 1,       // square
-        {context, renderTriangles}
+        {context, renderTriangles, makeItYourOwn}
     ) {
         this.eyePosition = eyePosition;
         this.gazeDirection = Vec3.normalize(gazeDirection);
@@ -296,7 +307,7 @@ class View {
         // add all non-light sources
         this.allSceneObjects = [];
         // Ellipsoids
-        getInputEllipsoids().forEach(input => {
+        getInputEllipsoids(makeItYourOwn).forEach(input => {
             this.allSceneObjects.push(new Ellipsoid(
                 new Vec3(input.x, input.y, input.z),
                 new Vec3(0, 0, 0),
@@ -310,8 +321,8 @@ class View {
             ))
         })
         // Triangles
-        if (this.renderTriangles) {
-            getInputTriangles().forEach(inputSet => {
+        if (this.renderTriangles || makeItYourOwn) {
+            getInputTriangles(makeItYourOwn).forEach(inputSet => {
                 inputSet.triangles.forEach(vertexSet => {
                     this.allSceneObjects.push(new Triangle(
                         new Vec3(
@@ -341,7 +352,7 @@ class View {
 
         // add light-sources
         this.lightSources = [];
-        getInputLights().forEach(input => {
+        getInputLights(makeItYourOwn).forEach(input => {
             const inputObj = new LightSource(
                 new Vec3(input.x, input.y, input.z),
                 new Vec3(0, 0, 0),
@@ -357,17 +368,18 @@ class View {
             this.lightSources.push(inputObj)
         })
 
+        this.viewPlaneCenterPosition = Vec3.add(this.eyePosition, Vec3.scale(this.gazeDirection, this.viewPlaneDistance))
+
         // Rectilinear
         this.viewPlaneRight = Vec3.scale(Vec3.cross(this.gazeDirection, this.viewUp), -this.viewVolume.x / this.viewport.width)
         this.viewPlaneDown = Vec3.scale(this.viewUp, -this.viewVolume.y / this.viewport.height)
 
+        this.viewPlaneTopLeftPosition = Vec3.add(Vec3.add(this.viewPlaneCenterPosition, Vec3.scale(this.viewPlaneRight, -this.viewport.width / 2)), Vec3.scale(this.viewPlaneDown, -this.viewport.height / 2))
+
         // Curvilinear
-        // const ET =
+        // this.viewPlaneTopLeftPosition = this.viewPlaneTopLeftPosition.subtract(this.eyePosition).normalize().scale(this.viewPlaneDistance)
         // this.viewPlaneRight = this.viewPlaneRight.multiply(this.viewPlaneDistance/(this.viewVolume.x / this.viewport.width))
         // this.viewPlaneDown = this.viewPlaneDown.normalize().scale(this.viewPlaneDistance)
-
-        this.viewPlaneCenterPosition = Vec3.add(this.eyePosition, Vec3.scale(this.gazeDirection, this.viewPlaneDistance))
-        this.viewPlaneTopLeftPosition = Vec3.add(Vec3.add(this.viewPlaneCenterPosition, Vec3.scale(this.viewPlaneRight, -this.viewport.width / 2)), Vec3.scale(this.viewPlaneDown, -this.viewport.height / 2))
 
     }
 
@@ -648,7 +660,9 @@ class LightSource extends SceneObject {
 /* main -- here is where execution begins after window load */
 
 const parameters = {
+    viewport: [512, 512],
     renderTriangles: false,
+    makeItYourOwn: false,
     eyePosition: new Vec3(0.5, 0.5, -0.5),
     gazeDirection: new Vec3(0, 0, 1),
     viewUp: new Vec3(0, 1, 0),
@@ -656,6 +670,31 @@ const parameters = {
     viewVolume: new Vec3(1, 1, Infinity)
 }
 
+const makeItYourOwnScene = {
+    ellipsoids: [
+        {"x": 0.5, "y": 0.7, "z": 0.5, "a":0.1, "b":0.5, "c":0.1, "ambient": [0.1,0.1,0.1], "diffuse": [0.6,0.0,0.0], "specular": [0.3,0.3,0.3], "n":9},
+        {"x": 0.5 + 0.25 * Math.cos(0 * (2 / 3) * Math.PI), "y": 0.0, "z": 0.5 + 0.25 * Math.sin(0 * (2 / 3) * Math.PI), "a":0.05, "b":0.15, "c":0.05, "ambient": [0.1,0.1,0.1], "diffuse": [0.6,0.0,0.0], "specular": [0.3,0.3,0.3], "n":9},
+        {"x": 0.5 + 0.25 * Math.cos(1 * (2 / 3) * Math.PI), "y": 0.0, "z": 0.5 + 0.25 * Math.sin(1 * (2 / 3) * Math.PI), "a":0.05, "b":0.15, "c":0.05, "ambient": [0.1,0.1,0.1], "diffuse": [0.6,0.0,0.0], "specular": [0.3,0.3,0.3], "n":9},
+        {"x": 0.5 + 0.25 * Math.cos(2 * (2 / 3) * Math.PI), "y": 0.0, "z": 0.5 + 0.25 * Math.sin(2 * (2 / 3) * Math.PI), "a":0.05, "b":0.15, "c":0.05, "ambient": [0.1,0.1,0.1], "diffuse": [0.6,0.0,0.0], "specular": [0.3,0.3,0.3], "n":9}
+    ],
+    triangles: [
+        {
+            "material": {"ambient": [0.1,0.1,0.1], "diffuse": [0.0,0.6,0.0], "specular": [0.3,0.3,0.3], "n": 3},
+            "vertices": [
+                [0.5, 0.25, 0.5],
+                [0.5, 0.35, 0.5],
+                [0.5 + 0.25 * Math.cos(0 * (2 / 3) * Math.PI), 0.0, 0.5 + 0.25 * Math.sin(0 * (2 / 3) * Math.PI)],
+                [0.5 + 0.25 * Math.cos(1 * (2 / 3) * Math.PI), 0.0, 0.5 + 0.25 * Math.sin(1 * (2 / 3) * Math.PI)],
+                [0.5 + 0.25 * Math.cos(2 * (2 / 3) * Math.PI), 0.0, 0.5 + 0.25 * Math.sin(2 * (2 / 3) * Math.PI)],
+            ],
+            "triangles": [[0,1,2], [0,1,3], [0,1,4]]
+        }
+    ],
+    boxes: [],
+    lights: [
+        {"x": -0.5, "y": 1.5, "z": -0.5, "ambient": [1,1,1], "diffuse": [1,1,1], "specular": [1,1,1]}
+    ]
+}
 
 function main(
     eyePosition = new Vec3(0.5, 0.5, -0.5),
@@ -664,7 +703,8 @@ function main(
     viewPlaneDistance = 0.5,
     viewVolume = new Vec3(1, 1, Infinity),
     viewport = {width: 512, height: 512},
-    renderTriangles = false
+    renderTriangles = false,
+    makeItYourOwn = false
 ) {
 
     console.log({
@@ -674,7 +714,8 @@ function main(
         viewPlaneDistance,
         viewVolume,
         viewport,
-        renderTriangles
+        renderTriangles,
+        makeItYourOwn
     })
 
     // Get the canvas and context
@@ -687,7 +728,8 @@ function main(
 
     const view = new View(eyePosition, gazeDirection, viewUp, viewport, viewPlaneDistance, viewVolume, {
         context,
-        renderTriangles
+        renderTriangles,
+        makeItYourOwn
     })
 
     view.renderView()
