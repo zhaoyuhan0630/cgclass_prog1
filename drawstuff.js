@@ -1,6 +1,195 @@
 /* classes */
 // noinspection SpellCheckingInspection
 
+const renderHardShadowsScene = {
+    ellipsoids: [
+        {
+            "x": 0.75,
+            "y": 0.75,
+            "z": 0.5,
+            "a": 0.2,
+            "b": 0.15,
+            "c": 0.1,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.0, 0.0, 0.6],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 5
+        },
+        {
+            "x": 0.75,
+            "y": 0.25,
+            "z": 0.5,
+            "a": 0.15,
+            "b": 0.2,
+            "c": 0.1,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.6, 0.0, 0.6],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 7
+        },
+        {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5,
+            "a": 0.2,
+            "b": 0.3,
+            "c": 0.1,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.6, 0.6, 0.0],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 9
+        },
+        {
+            "x": 0,
+            "y": 1,
+            "z": 0,
+            "a": 0.01,
+            "b": 0.02,
+            "c": 0.01,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.6, 0.6, 0.0],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 9
+        }
+    ]
+}
+
+const makeItYourOwnScene = {
+    ellipsoids: [
+        // moon
+        {
+            "x": 0.5,
+            "y": -100.15,
+            "z": 0.5,
+            "a": 100,
+            "b": 100,
+            "c": 100,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.6, 0.6, 0.6],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 4
+        },
+        // earth
+        {
+            "x": -50,
+            "y": 50,
+            "z": 100,
+            "a": 10,
+            "b": 10,
+            "c": 10,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.3, 0.4, 1],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 9
+        },
+        // main body
+        {
+            "x": 0.5,
+            "y": 0.7,
+            "z": 0.5,
+            "a": 0.1,
+            "b": 0.5,
+            "c": 0.1,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.6, 0.0, 0.0],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 9
+        },
+        // supports
+        {
+            "x": 0.5 + 0.25 * Math.cos((0 * (2 / 3) + 0.09) * Math.PI),
+            "y": 0.0,
+            "z": 0.5 + 0.25 * Math.sin((0 * (2 / 3) + 0.09) * Math.PI),
+            "a": 0.05,
+            "b": 0.15,
+            "c": 0.05,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.6, 0.0, 0.0],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 9
+        },
+        {
+            "x": 0.5 + 0.25 * Math.cos((1 * (2 / 3) + 0.09) * Math.PI),
+            "y": 0.0,
+            "z": 0.5 + 0.25 * Math.sin((1 * (2 / 3) + 0.09) * Math.PI),
+            "a": 0.05,
+            "b": 0.15,
+            "c": 0.05,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.6, 0.0, 0.0],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 9
+        },
+        {
+            "x": 0.5 + 0.25 * Math.cos((2 * (2 / 3) + 0.09) * Math.PI),
+            "y": 0.0,
+            "z": 0.5 + 0.25 * Math.sin((2 * (2 / 3) + 0.09) * Math.PI),
+            "a": 0.05,
+            "b": 0.15,
+            "c": 0.05,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.6, 0.0, 0.0],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 9
+        }
+    ],
+    triangles: [
+        {
+            "material": {"ambient": [0.1, 0.1, 0.1], "diffuse": [0.0, 0.6, 0.0], "specular": [0.3, 0.3, 0.3], "n": 3},
+            "vertices": [
+                [0.5, 0.25, 0.5],
+                [0.5, 0.35, 0.5],
+                [0.5 + 0.25 * Math.cos((0 * (2 / 3) + 0.09) * Math.PI), 0.0, 0.5 + 0.25 * Math.sin((0 * (2 / 3) + 0.09) * Math.PI)],
+                [0.5 + 0.25 * Math.cos((1 * (2 / 3) + 0.09) * Math.PI), 0.0, 0.5 + 0.25 * Math.sin((1 * (2 / 3) + 0.09) * Math.PI)],
+                [0.5 + 0.25 * Math.cos((2 * (2 / 3) + 0.09) * Math.PI), 0.0, 0.5 + 0.25 * Math.sin((2 * (2 / 3) + 0.09) * Math.PI)],
+            ],
+            "triangles": [[0, 1, 2], [0, 1, 3], [0, 1, 4]]
+        }
+    ],
+    boxes: [
+        // boxes on ground
+        {
+            "lx": 0,
+            "rx": 0.17,
+            "by": -0.15,
+            "ty": 0,
+            "fz": 0.6,
+            "rz": 0.8,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.0, 0.0, 0.6],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 5
+        },
+        {
+            "lx": -0.2,
+            "rx": -0.05,
+            "by": -0.15,
+            "ty": -0.08,
+            "fz": 0.6,
+            "rz": 0.7,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.0, 0.6, 0.6],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 5
+        },
+        {
+            "lx": 0.03,
+            "rx": 0.13,
+            "by": 0,
+            "ty": 0.05,
+            "fz": 0.6,
+            "rz": 0.85,
+            "ambient": [0.1, 0.1, 0.1],
+            "diffuse": [0.0, 0.6, 0.0],
+            "specular": [0.3, 0.3, 0.3],
+            "n": 5
+        },
+    ],
+    lights: [
+        {"x": -5000, "y": 4000, "z": -5000, "ambient": [1, 1, 1], "diffuse": [1, 1, 1], "specular": [1, 1, 1]}
+    ]
+}
+
 // Color constructor
 class Color {
     constructor(r, g, b, a) {
@@ -74,10 +263,10 @@ function drawPixel(imagedata, x, y, color) {
 
 // get the input ellipsoids from the standard class URL
 function getInputEllipsoids(makeItYourOwn = false) {
-    if(makeItYourOwn){
+    if (makeItYourOwn) {
         return makeItYourOwnScene.ellipsoids
     }
-    const INPUT_ELLIPSOIDS_URL = "/ellipsoids.json";
+    const INPUT_ELLIPSOIDS_URL = "https://ncsucgclass.github.io/prog1/ellipsoids.json";
 
     // load the ellipsoids file
     var httpReq = new XMLHttpRequest(); // a new http request
@@ -97,11 +286,11 @@ function getInputEllipsoids(makeItYourOwn = false) {
 
 // get the input lights from the standard class URL
 function getInputLights(makeItYourOwn) {
-    if(makeItYourOwn){
+    if (makeItYourOwn) {
         return makeItYourOwnScene.lights
     }
     const INPUT_LIGHTS_URL =
-        "/lights.json";
+        "https://ncsucgclass.github.io/prog1/lights.json";
 
     // load the ellipsoids file
     var httpReq = new XMLHttpRequest(); // a new http request
@@ -121,11 +310,11 @@ function getInputLights(makeItYourOwn) {
 
 //get the input triangles from the standard class URL
 function getInputTriangles(makeItYourOwn) {
-    if(makeItYourOwn){
+    if (makeItYourOwn) {
         return makeItYourOwnScene.triangles
     }
     const INPUT_TRIANGLES_URL =
-        "/triangles2.json";
+        "https://ncsucgclass.github.io/prog1/triangles2.json";
 
     // load the triangles file
     var httpReq = new XMLHttpRequest(); // a new http request
@@ -145,11 +334,11 @@ function getInputTriangles(makeItYourOwn) {
 
 //get the input boxex from the standard class URL
 function getInputBoxes(makeItYourOwn) {
-    if(makeItYourOwn){
+    if (makeItYourOwn) {
         return makeItYourOwnScene.boxes
     }
     const INPUT_BOXES_URL =
-        "/boxes.json";
+        "https://ncsucgclass.github.io/prog1/boxes.json";
 
     // load the boxes file
     var httpReq = new XMLHttpRequest(); // a new http request
@@ -284,7 +473,7 @@ class View {
         viewVolume = new Vec3(1, 1, Infinity),
         // fov = Math.PI/2,       // radians
         // aspectRatio = 1,       // square
-        {context, renderTriangles, makeItYourOwn}
+        {context, renderEllipsoids, renderTriangles, renderBoxes, makeItYourOwn, renderHardShadows}
     ) {
         this.eyePosition = eyePosition;
         this.gazeDirection = Vec3.normalize(gazeDirection);
@@ -295,7 +484,10 @@ class View {
         // this.fov = fov;
         // this.aspectRatio = aspectRatio;
         this.context = context;
+        this.renderEllipsoids = renderEllipsoids;
         this.renderTriangles = renderTriangles;
+        this.renderBoxes = renderBoxes;
+        this.renderHardShadows = renderHardShadows;
 
         // const M = new Mat4([
         //     [2 * Math.abs(viewPlaneDistance), 0, 2 * Vec3.add(eyePosition, Vec3.scale(gazeDirection, viewPlaneDistance)).x / viewVolume.x, 0],
@@ -307,19 +499,37 @@ class View {
         // add all non-light sources
         this.allSceneObjects = [];
         // Ellipsoids
-        getInputEllipsoids(makeItYourOwn).forEach(input => {
-            this.allSceneObjects.push(new Ellipsoid(
-                new Vec3(input.x, input.y, input.z),
-                new Vec3(0, 0, 0),
-                {
-                    ambient: new Vec3(...(input.ambient)),
-                    diffuse: new Vec3(...(input.diffuse)),
-                    specular: new Vec3(...(input.specular)),
-                    n: input.n
-                },
-                new Vec3(input.a, input.b, input.c)
-            ))
-        })
+        if (this.renderEllipsoids || makeItYourOwn) {
+            getInputEllipsoids(makeItYourOwn).forEach(input => {
+                this.allSceneObjects.push(new Ellipsoid(
+                    new Vec3(input.x, input.y, input.z),
+                    new Vec3(0, 0, 0),
+                    {
+                        ambient: new Vec3(...(input.ambient)),
+                        diffuse: new Vec3(...(input.diffuse)),
+                        specular: new Vec3(...(input.specular)),
+                        n: input.n
+                    },
+                    new Vec3(input.a, input.b, input.c)
+                ))
+            })
+        }
+        // Boxes
+        if (this.renderBoxes || makeItYourOwn) {
+            getInputBoxes(makeItYourOwn).forEach(input => {
+                this.allSceneObjects.push(new Box(
+                    new Vec3(input.lx, input.by, input.fz),
+                    new Vec3(0, 0, 0),
+                    {
+                        ambient: new Vec3(...(input.ambient)),
+                        diffuse: new Vec3(...(input.diffuse)),
+                        specular: new Vec3(...(input.specular)),
+                        n: input.n
+                    },
+                    new Vec3(input.rx - input.lx, input.ty - input.by, input.rz - input.fz)
+                ))
+            })
+        }
         // Triangles
         if (this.renderTriangles || makeItYourOwn) {
             getInputTriangles(makeItYourOwn).forEach(inputSet => {
@@ -364,7 +574,7 @@ class View {
                 },
                 0.5
             )
-            this.allSceneObjects.push(inputObj)
+            // this.allSceneObjects.push(inputObj)
             this.lightSources.push(inputObj)
         })
 
@@ -383,8 +593,89 @@ class View {
 
     }
 
+    shadePixel({pixelPosition, backgroundColor}) {
+        const rayDirection = Vec3.subtract(pixelPosition, this.eyePosition)
+
+        let min_intersection = Infinity
+        let pixelColor = backgroundColor;
+
+        this.allSceneObjects.forEach(so => {
+            const t = so.getIntersection(this.eyePosition, rayDirection)
+            // check if nearest intersection is behind viewPlane
+            if (t >= 1) {
+                if (min_intersection > t) {
+                    min_intersection = t
+
+                    if (so.constructor === LightSource) {
+                        // Skip shading for LightSource
+                        pixelColor = new Color(so.matrlProps.diffuse.x * 255, so.matrlProps.diffuse.y * 255, so.matrlProps.diffuse.z * 255, 255)
+                    } else {
+                        // Shading
+                        const intersectionPoint = Vec3.add(this.eyePosition, Vec3.scale(rayDirection, t))
+                        const normalVec = so.getNormal(intersectionPoint)
+                        let tempColorVec = new Vec3(0, 0, 0)
+                        const combinedMatrlProps = {
+                            ambient: new Vec3(0, 0, 0),
+                            diffuse: new Vec3(0, 0, 0),
+                            specular: new Vec3(0, 0, 0)
+                        }
+                        this.lightSources.forEach(ls => {
+                            const lightVec = Vec3.normalize(Vec3.subtract(ls.position, intersectionPoint))
+                            const NL = Vec3.dot(normalVec, lightVec)
+                            combinedMatrlProps.ambient = combinedMatrlProps.ambient.add(ls.matrlProps.ambient)
+
+                            // hard shadows
+                            if (this.renderHardShadows) {
+                                let noShadow = true
+                                let obstructingT = 1
+                                this.allSceneObjects.every(obstructingSO => {
+                                    obstructingT = obstructingSO.getIntersection(intersectionPoint, lightVec)
+                                    if (0 < obstructingT && obstructingT < 1 && obstructingSO.constructor !== LightSource) {
+                                        noShadow = false
+                                    }
+                                    return noShadow
+                                })
+
+                                if (!noShadow) {
+                                    return;
+                                }
+                            }
+                            if (NL <= 0) {
+                                return;
+                            }
+
+                            // specular highlight calculations
+                            // const reflectionVec = Vec3.subtract(Vec3.scale(normalVec, 2 * NL), lightVec)
+                            // const RN = Vec3.dot(reflectionVec, normalVec)
+                            const EL = Vec3.subtract(lightVec, this.gazeDirection)
+                            const highlightVec = Vec3.normalize(Vec3.scale(EL, Vec3.distance(EL)))
+                            const HN = Vec3.dot(highlightVec, normalVec)
+
+                            combinedMatrlProps.diffuse = combinedMatrlProps.diffuse.add(ls.matrlProps.diffuse.scale(NL))
+                            combinedMatrlProps.specular = combinedMatrlProps.specular.add(ls.matrlProps.specular.scale(Math.max(0, HN) ** so.matrlProps.n))
+                        })
+
+                        tempColorVec = tempColorVec.add(so.matrlProps.ambient.multiply(combinedMatrlProps.ambient))        // ambient
+                        tempColorVec = tempColorVec.add(so.matrlProps.diffuse.multiply(combinedMatrlProps.diffuse))        // diffuse
+                        tempColorVec = tempColorVec.add(so.matrlProps.specular.multiply(combinedMatrlProps.specular))      // specular
+
+                        // ensure 0-1 range of color
+                        tempColorVec.x = Math.min(Math.max(so.matrlProps.ambient.x * combinedMatrlProps.ambient.x, tempColorVec.x), 1)
+                        tempColorVec.y = Math.min(Math.max(so.matrlProps.ambient.y * combinedMatrlProps.ambient.y, tempColorVec.y), 1)
+                        tempColorVec.z = Math.min(Math.max(so.matrlProps.ambient.z * combinedMatrlProps.ambient.z, tempColorVec.z), 1)
+
+                        // change pixel color
+                        pixelColor = new Color(tempColorVec.x * 255, tempColorVec.y * 255, tempColorVec.z * 255, 255)
+                    }
+                }
+            }
+        })
+
+        return pixelColor;
+    }
+
     renderView() {
-        let c = new Color(0, 0, 0, 255); // the color at the pixel: black
+        let backgroundColor = new Color(0, 0, 0, 255); // the color at the pixel: black
         const w = this.context.canvas.width;
         const h = this.context.canvas.height;
         const imagedata = this.context.createImageData(w, h);
@@ -392,64 +683,7 @@ class View {
             const viewLineLeft = Vec3.add(this.viewPlaneTopLeftPosition, Vec3.scale(this.viewPlaneDown, j + 0.5))
             for (let i = 0; i < this.viewport.width; i++) {
                 const pixelPosition = Vec3.add(viewLineLeft, Vec3.scale(this.viewPlaneRight, i + 0.5))
-                const rayDirection = Vec3.subtract(pixelPosition, this.eyePosition)
-
-                let min_intersection = Infinity
-                let pixelColor = c;
-
-                this.allSceneObjects.forEach(so => {
-                    const t = so.getIntersection(this.eyePosition, rayDirection)
-                    // check if nearest intersection is behind viewPlane
-                    if (t >= 1) {
-                        if (min_intersection > t) {
-                            min_intersection = t
-
-                            if (so.constructor === LightSource) {
-                                // Skip shading for LightSource
-                                pixelColor = new Color(so.matrlProps.diffuse.x * 255, so.matrlProps.diffuse.y * 255, so.matrlProps.diffuse.z * 255, 255)
-                            } else {
-                                // Shading
-                                const intersectionPoint = Vec3.add(this.eyePosition, Vec3.scale(rayDirection, t))
-                                const normalVec = so.getNormal(intersectionPoint)
-                                let tempColorVec = new Vec3(0, 0, 0)
-                                const combinedMatrlProps = {
-                                    ambient: new Vec3(0, 0, 0),
-                                    diffuse: new Vec3(0, 0, 0),
-                                    specular: new Vec3(0, 0, 0)
-                                }
-                                this.lightSources.forEach(ls => {
-                                    const lightVec = Vec3.normalize(Vec3.subtract(ls.position, intersectionPoint))
-                                    const NL = Vec3.dot(normalVec, lightVec)
-                                    combinedMatrlProps.ambient = combinedMatrlProps.ambient.add(ls.matrlProps.ambient)
-                                    if (NL <= 0) {
-                                        return;
-                                    }
-                                    // const reflectionVec = Vec3.subtract(Vec3.scale(normalVec, 2 * NL), lightVec)
-                                    // const RN = Vec3.dot(reflectionVec, normalVec)
-                                    const EL = Vec3.subtract(lightVec, this.gazeDirection)
-                                    const highlightVec = Vec3.normalize(Vec3.scale(EL, Vec3.distance(EL)))
-                                    const HN = Vec3.dot(highlightVec, normalVec)
-
-                                    combinedMatrlProps.diffuse = combinedMatrlProps.diffuse.add(ls.matrlProps.diffuse.scale(NL))
-                                    combinedMatrlProps.specular = combinedMatrlProps.specular.add(ls.matrlProps.specular.scale(Math.max(0, HN) ** so.matrlProps.n))
-                                })
-
-                                tempColorVec = tempColorVec.add(so.matrlProps.ambient.multiply(combinedMatrlProps.ambient))        // ambient
-                                tempColorVec = tempColorVec.add(so.matrlProps.diffuse.multiply(combinedMatrlProps.diffuse))        // diffuse
-                                tempColorVec = tempColorVec.add(so.matrlProps.specular.multiply(combinedMatrlProps.specular))      // specular
-
-                                // ensure 0-1 range of color
-                                tempColorVec.x = Math.min(Math.max(so.matrlProps.ambient.x * combinedMatrlProps.ambient.x, tempColorVec.x), 1)
-                                tempColorVec.y = Math.min(Math.max(so.matrlProps.ambient.y * combinedMatrlProps.ambient.y, tempColorVec.y), 1)
-                                tempColorVec.z = Math.min(Math.max(so.matrlProps.ambient.z * combinedMatrlProps.ambient.z, tempColorVec.z), 1)
-
-                                // change pixel color
-                                pixelColor = new Color(tempColorVec.x * 255, tempColorVec.y * 255, tempColorVec.z * 255, 255)
-                            }
-                        }
-                    }
-                    drawPixel(imagedata, i, j, pixelColor)
-                })
+                drawPixel(imagedata, i, j, this.shadePixel({backgroundColor, pixelPosition}))
             }
         }
 
@@ -473,7 +707,7 @@ class SceneObject {
         this.matrlProps = matrlProps;
     }
 
-    getIntersection(eyePosition = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
+    getIntersection(rayOrigin = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
         if (true) {
             throw "getIntersection: Unimplemented function"
         }
@@ -502,9 +736,9 @@ class Ellipsoid extends SceneObject {
         this.radii = radii;
     }
 
-    getIntersection(eyePosition = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
+    getIntersection(rayOrigin = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
         const DA = Vec3.divide(rayDirection, this.radii);
-        const ECA = Vec3.divide(Vec3.subtract(eyePosition, this.position), this.radii);
+        const ECA = Vec3.divide(Vec3.subtract(rayOrigin, this.position), this.radii);
         const a = Vec3.dot(DA, DA);
         const b = 2 * Vec3.dot(DA, ECA);
         const c = Vec3.dot(ECA, ECA) - 1;
@@ -556,17 +790,17 @@ class Triangle extends SceneObject {
         return Math.abs(sum) >= 2;
     }
 
-    getIntersection(eyePosition = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
+    getIntersection(rayOrigin = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
         if (this.normalVec.dot(rayDirection) === 0) {
             return 0;
         }
 
-        const t = (this.planeConstant - this.normalVec.dot(eyePosition)) / (this.normalVec.dot(rayDirection));
+        const t = (this.planeConstant - this.normalVec.dot(rayOrigin)) / (this.normalVec.dot(rayDirection));
         if (t < 1) {
             return 0;
         }
 
-        if (this.intersectionInteriority(eyePosition.add(rayDirection.scale(t)))) {
+        if (this.intersectionInteriority(rayOrigin.add(rayDirection.scale(t)))) {
             return t;
         }
         return 0;
@@ -593,32 +827,37 @@ class Box extends SceneObject {
         this.dimensions = dimensions;
     }
 
-    getIntersection(eyePosition = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
-        const DA = Vec3.divide(rayDirection, this.radii);
-        const ECA = Vec3.divide(Vec3.subtract(eyePosition, this.position), this.radii);
-        const a = Vec3.dot(DA, DA);
-        const b = 2 * Vec3.dot(DA, ECA);
-        const c = Vec3.dot(ECA, ECA) - 1;
 
-        const discriminant = b * b - 4 * a * c;
-        if (discriminant < 0) {
-            return 0;
-        } else if (discriminant === 0) {
-            return -b / (2 * a);
-        } else {
-            const temp = Math.sqrt(discriminant);
-            return Math.min((-b + temp) / (2 * a), (-b - temp) / (2 * a));
-        }
+    getIntersection(rayOrigin = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
+        const t0 = this.position.subtract(rayOrigin).divide(rayDirection)
+        const t1 = this.position.add(this.dimensions).subtract(rayOrigin).divide(rayDirection)
+
+        const T0 = Math.max(Math.min(t0.x, t1.x), Math.min(t0.y, t1.y), Math.min(t0.z, t1.z))
+        const T1 = Math.min(Math.max(t0.x, t1.x), Math.max(t0.y, t1.y), Math.max(t0.z, t1.z))
+
+        return (T0 <= T1) ? T0 : 0
     }
 
     getNormal(intersectionPoint = new Vec3(0, 0, 0)) {
-        if (true) {
-            throw "getIntersection: Unimplemented function"
+        if (0.00001 > Math.abs(intersectionPoint.x - this.position.x)) {
+            return new Vec3(-1, 0, 0)
+        } else if (0.00001 > Math.abs(intersectionPoint.x - (this.position.x + this.dimensions.x))) {
+            return new Vec3(1, 0, 0)
+        } else if (0.00001 > Math.abs(intersectionPoint.y - this.position.y)) {
+            return new Vec3(0, -1, 0)
+        } else if (0.00001 > Math.abs(intersectionPoint.y - (this.position.y + this.dimensions.y))) {
+            return new Vec3(0, 1, 0)
+        } else if (0.00001 > Math.abs(intersectionPoint.z - this.position.z)) {
+            return new Vec3(0, 0, -1)
+        } else if (0.00001 > Math.abs(intersectionPoint.z - (this.position.z + this.dimensions.z))) {
+            return new Vec3(0, 0, 1)
+        } else {
+            return new Vec3(0, 0, -1)
         }
     }
 }
 
-class LightSource extends SceneObject {
+class LightSource extends Ellipsoid {
     constructor(
         position = new Vec3(0, 0, 0),
         rotation = new Vec3(0, 0, 0),
@@ -630,30 +869,7 @@ class LightSource extends SceneObject {
         },
         radius = 1
     ) {
-        super(position, rotation, matrlProps);
-        this.radius = radius;
-    }
-
-    getIntersection(eyePosition = new Vec3(0, 0, 0), rayDirection = new Vec3(1, 1, 1)) {
-        const DA = Vec3.scale(rayDirection, 1 / this.radius);
-        const ECA = Vec3.scale(Vec3.subtract(eyePosition, this.position), 1 / this.radius);
-        const a = Vec3.dot(DA, DA);
-        const b = 2 * Vec3.dot(DA, ECA);
-        const c = Vec3.dot(ECA, ECA) - 1;
-
-        const discriminant = b * b - 4 * a * c;
-        if (discriminant < 0) {
-            return 0;
-        } else if (discriminant === 0) {
-            return -b / (2 * a);
-        } else {
-            const temp = Math.sqrt(discriminant);
-            return Math.min((-b + temp) / (2 * a), (-b - temp) / (2 * a));
-        }
-    }
-
-    getNormal(intersectionPoint = new Vec3(0, 0, 0)) {
-        return;
+        super(position, rotation, matrlProps, new Vec3(radius, radius, radius));
     }
 }
 
@@ -661,8 +877,11 @@ class LightSource extends SceneObject {
 
 const parameters = {
     viewport: [512, 512],
+    renderEllipsoids: true,
     renderTriangles: false,
+    renderBoxes: false,
     makeItYourOwn: false,
+    renderHardShadows: false,
     eyePosition: new Vec3(0.5, 0.5, -0.5),
     gazeDirection: new Vec3(0, 0, 1),
     viewUp: new Vec3(0, 1, 0),
@@ -670,31 +889,6 @@ const parameters = {
     viewVolume: new Vec3(1, 1, Infinity)
 }
 
-const makeItYourOwnScene = {
-    ellipsoids: [
-        {"x": 0.5, "y": 0.7, "z": 0.5, "a":0.1, "b":0.5, "c":0.1, "ambient": [0.1,0.1,0.1], "diffuse": [0.6,0.0,0.0], "specular": [0.3,0.3,0.3], "n":9},
-        {"x": 0.5 + 0.25 * Math.cos(0 * (2 / 3) * Math.PI), "y": 0.0, "z": 0.5 + 0.25 * Math.sin(0 * (2 / 3) * Math.PI), "a":0.05, "b":0.15, "c":0.05, "ambient": [0.1,0.1,0.1], "diffuse": [0.6,0.0,0.0], "specular": [0.3,0.3,0.3], "n":9},
-        {"x": 0.5 + 0.25 * Math.cos(1 * (2 / 3) * Math.PI), "y": 0.0, "z": 0.5 + 0.25 * Math.sin(1 * (2 / 3) * Math.PI), "a":0.05, "b":0.15, "c":0.05, "ambient": [0.1,0.1,0.1], "diffuse": [0.6,0.0,0.0], "specular": [0.3,0.3,0.3], "n":9},
-        {"x": 0.5 + 0.25 * Math.cos(2 * (2 / 3) * Math.PI), "y": 0.0, "z": 0.5 + 0.25 * Math.sin(2 * (2 / 3) * Math.PI), "a":0.05, "b":0.15, "c":0.05, "ambient": [0.1,0.1,0.1], "diffuse": [0.6,0.0,0.0], "specular": [0.3,0.3,0.3], "n":9}
-    ],
-    triangles: [
-        {
-            "material": {"ambient": [0.1,0.1,0.1], "diffuse": [0.0,0.6,0.0], "specular": [0.3,0.3,0.3], "n": 3},
-            "vertices": [
-                [0.5, 0.25, 0.5],
-                [0.5, 0.35, 0.5],
-                [0.5 + 0.25 * Math.cos(0 * (2 / 3) * Math.PI), 0.0, 0.5 + 0.25 * Math.sin(0 * (2 / 3) * Math.PI)],
-                [0.5 + 0.25 * Math.cos(1 * (2 / 3) * Math.PI), 0.0, 0.5 + 0.25 * Math.sin(1 * (2 / 3) * Math.PI)],
-                [0.5 + 0.25 * Math.cos(2 * (2 / 3) * Math.PI), 0.0, 0.5 + 0.25 * Math.sin(2 * (2 / 3) * Math.PI)],
-            ],
-            "triangles": [[0,1,2], [0,1,3], [0,1,4]]
-        }
-    ],
-    boxes: [],
-    lights: [
-        {"x": -0.5, "y": 1.5, "z": -0.5, "ambient": [1,1,1], "diffuse": [1,1,1], "specular": [1,1,1]}
-    ]
-}
 
 function main(
     eyePosition = new Vec3(0.5, 0.5, -0.5),
@@ -703,8 +897,11 @@ function main(
     viewPlaneDistance = 0.5,
     viewVolume = new Vec3(1, 1, Infinity),
     viewport = {width: 512, height: 512},
+    renderEllipsoids = true,
     renderTriangles = false,
-    makeItYourOwn = false
+    renderBoxes = false,
+    makeItYourOwn = false,
+    renderHardShadows = false
 ) {
 
     console.log({
@@ -714,8 +911,11 @@ function main(
         viewPlaneDistance,
         viewVolume,
         viewport,
+        renderEllipsoids,
         renderTriangles,
-        makeItYourOwn
+        renderBoxes,
+        makeItYourOwn,
+        renderHardShadows
     })
 
     // Get the canvas and context
@@ -728,8 +928,11 @@ function main(
 
     const view = new View(eyePosition, gazeDirection, viewUp, viewport, viewPlaneDistance, viewVolume, {
         context,
+        renderEllipsoids,
         renderTriangles,
-        makeItYourOwn
+        renderBoxes,
+        makeItYourOwn,
+        renderHardShadows
     })
 
     view.renderView()

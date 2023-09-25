@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Pixel Drawing</title>
+    
     <script type="text/javascript" src="drawstuff.js"></script>
     <style>
         body {
@@ -10,12 +11,15 @@
             flex-direction: row;
             flex-wrap: wrap;
             align-items: flex-start;
+            font-family: system-ui;
         }
 
         form {
             border: black 1px solid;
             padding: 5px;
             width: max-content;
+            border-radius: 5px;
+            border-top-left-radius: 1px;
         }
 
         span {
@@ -33,7 +37,8 @@
 
         div {
             border-top: 1px black solid;
-            max-width: max-content;
+            min-width: max-content;
+            max-width: 100%;
         }
 
         .inner_div {
@@ -78,12 +83,15 @@
         const viewPlaneDistance = params['viewPlaneDistance']
         const viewVolume = new Vec3(params['viewVolume_x'], params['viewVolume_y'], params['viewVolume_z'])
         const viewport = {width: params['viewport_0'] || 512, height: params['viewport_1'] || 512}
+        const renderEllipsoids = form_data.get('renderEllipsoids')
         const renderTriangles = form_data.get('renderTriangles')
+        const renderBoxes = form_data.get('renderBoxes')
         const makeItYourOwn = form_data.get('makeItYourOwn')
+        const renderHardShadows = form_data.get('renderHardShadows')
 
-        let start = performance.now();
-        main(eyePosition, gazeDirection, viewUp, viewPlaneDistance, viewVolume, viewport, renderTriangles, makeItYourOwn)
-        let timeTaken = performance.now() - start;
+        const start = performance.now();
+        main(eyePosition, gazeDirection, viewUp, viewPlaneDistance, viewVolume, viewport, renderEllipsoids, renderTriangles, renderBoxes, makeItYourOwn, renderHardShadows)
+        const timeTaken = performance.now() - start;
         console.log("Total time taken : " + timeTaken + " milliseconds");
 
     })
