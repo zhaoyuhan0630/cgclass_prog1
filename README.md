@@ -13,14 +13,14 @@ Yuhan Zhao (yzhao66@ncsu.edu, 200559835)
 
 
 ## Grading and Extra Credits
-| Grade | Part          | Description                                                                                                                     | Completed?                                                                                |
+| Grade | Part          | Description                                                                                                                     | state                                                                                |
 |----------|---------------|---------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
 | 5        | 0             | partial feedback                                                                                                                | **Yes**                                                                                   |
 | 5        | 0.5           | properly turned in assignment                                                                                                   | **Yes**                                                                                   |
 | 45       | 1             | ray cast the colored triangles2 in the input file without lighting                                                              | **Yes**                                                                                   |
 | 35       | 2             | color the triangles2 with Blinn-Phong illumination                                                                              | **Yes**                                                                                   |
 | 10       | 3             | make it your own                                                                                                                | **Yes**                                                                                   |
-| -        | Participation | Receive participation credit (https://discordapp.com/channels/1273692288010158123/1275142191228125236/1283780731134410855)                                                                | **Yes**  |
+| -        |  | Receive participation credit (https://discordapp.com/channels/1273692288010158123/1275142191228125236/1283780731134410855)                                                                | **Yes**  |
 | -        | Extra         | Arbitrarily sized images and viewports                                                                                          | **Yes**                                                                                   |
 | -        | Extra         | Support arbitrary viewing setups                                                                                                | **Yes**                                                                                   |
 | -        | Extra         | Support off-axis and rectangular projections                                                                                    | **Yes**                                                                                   |
