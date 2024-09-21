@@ -13,7 +13,7 @@ Yuhan Zhao (yzhao66@ncsu.edu, 200559835)
 
 
 ## Grading and Extra Credits
-| Grading% | Part          | Description                                                                                                                     | Completed?                                                                                |
+| Grade | Part          | Description                                                                                                                     | Completed?                                                                                |
 |----------|---------------|---------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
 | 5        | 0             | partial feedback                                                                                                                | **Yes**                                                                                   |
 | 5        | 0.5           | properly turned in assignment                                                                                                   | **Yes**                                                                                   |
