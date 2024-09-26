@@ -1,30 +1,10 @@
-# Program 1 2024: Ray casting (Rendering Triangles)
+# Program 2 2024: Intro to WebGL
 Yuhan Zhao (yzhao66@ncsu.edu, 200559835)
 
 ### Basic Information and General:
-- The final HTML features two canvases: the left canvas displays the results for spheres, boxes, and "make it your own", while the right canvas consistently presents the results of the Blinn-Phong lighting calculations for Triangles2. The "View Parameters" on the right side allow for adjustments to the Eye Position, Gaze Direction, View Up, View Volume, viewPlaneDistance, and Viewport. Additionally, it includes options to select which results to display on the left canvas: spheres, boxes, and "make it your own".
-
-- Hard shadows is combined with _Make It Your Own_.
-  
-- Part 1: Using ray casting, render unlit, colored triangles
-  Part 2: Using ray casting, render lit triangles
-  Part 3: Make it your own: In this part, I will use an image resembling an atomic structure composed of four circles and three triangles, alongside an red ellipse.
-
-
-
-## Grading and Extra Credits
-| Grade | Part          | Description                                                                                                                     | state                                                                                |
-|----------|---------------|---------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
-| 5        | 0             | partial feedback                                                                                                                | **Yes**                                                                                   |
-| 5        | 0.5           | properly turned in assignment                                                                                                   | **Yes**                                                                                   |
-| 45       | 1             | ray cast the colored triangles2 in the input file without lighting                                                              | **Yes**                                                                                   |
-| 35       | 2             | color the triangles2 with Blinn-Phong illumination                                                                              | **Yes**                                                                                   |
-| 10       | 3             | make it your own                                                                                                                | **Yes**                                                                                   |
-| -        |  | Receive participation credit (https://discordapp.com/channels/1273692288010158123/1275142191228125236/1283780731134410855)                                                                | **Yes**  |
-| -        | Extra         | Arbitrarily sized images and viewports                                                                                          | **Yes**                                                                                   |
-| -        | Extra         | Support arbitrary viewing setups                                                                                                | **Yes**                                                                                   |
-| -        | Extra         | Support off-axis and rectangular projections                                                                                    | **Yes**                                                                                   |
-| -        | Extra         | Multiple and arbitrarily located lights                                                                                         | **Yes**                                                                                   |
-| -        | Extra         | Detect shadows during ray casting                                                                                               | **Yes**                                                                                   |
-| -        | Extra         | Render spheres                                                                                                                  | **Yes**                                                                                   |
-| -        | Extra         | Voted most interesting                                                                                                          | **No**                                                                               |
+20% Part 1: attempt to display all triangles using index buffers
+25% Part 2: display all input triangles in correct positions with index buffers
+20% Part 3: attempt to display varying triangle colors using shader parameters
+25% Part 4: display triangles with correct colors using shader parameters
+10% Part 5: make it your own 
+- In the "make it on your own" section, a square is added to the bottom left corner of the canvas. The initial color of the square is cyan. Each time the space bar is pressed on the keyboard, the color of the square changes randomly.
